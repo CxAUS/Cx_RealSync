@@ -1,7 +1,7 @@
 local Config = {
     apikey = "", -- https://www.weatherapi.com/signup.aspx generate an api key and place it here
     city = "Tasmania",
-    refreshTime = 10 * 60000, --min
+    refreshTime = 10 * 60000, -- (10 * 60000) 10 minutes default 
 }
 
 local weatherType, windSpeed, windDirection
