@@ -6,6 +6,16 @@ local Config = {
 
 local weatherType, windSpeed, windDirection
 
+if Config.apikey == "" or Config.apikey == nil then
+	NotifyError()
+end
+
+function NotifyError()
+	print("You need a API key entered into the server config")
+	Citizen.Wait(1000)
+	NotifyError() -- Loops Error
+end
+
 local apiString = "http://api.weatherapi.com/v1/current.json?key=" .. Config.apikey .. "&q=" .. Config.city
 
 Citizen.CreateThread(function()
@@ -16,13 +26,11 @@ Citizen.CreateThread(function()
     end
 end)
 
-RegisterServerEvent('trp:core:syncWeather')
-AddEventHandler('trp:core:syncWeather', function()
+RegisterNetEvent('trp:core:syncWeather', function()
     TriggerClientEvent('trp:core:syncWeather', source, windSpeed, windDirection, weatherType)
 end)
 
-RegisterServerEvent('trp:core:syncTime')
-AddEventHandler('trp:core:syncTime', function()
+RegisterNetEvent('trp:core:syncTime', function()
     local h, m, s = tonumber(os.date("%H")), tonumber(os.date("%M")), tonumber(os.date("%S"))
     local OSDATE = os.date('%Y-%m-%d %H:%M:%S')
 	TriggerClientEvent("trp:core:syncTime", source, "ChangeTime", h, m, s)
@@ -32,8 +40,8 @@ end)
 
 function syncWeather()
     PerformHttpRequest(apiString, function (errorCode, resultData, resultHeaders)
+	if weatherType == nil or weatherType == "" then print("Unable to Sync Weather Something went wrong") return end
         weatherType = json.decode(resultData).current.condition.code
-        print(weatherType)
         windSpeed = json.decode(resultData).current.wind_mph
         windDirection = json.decode(resultData).current.wind_degree
         TriggerClientEvent('trp:core:syncWeather', -1, windSpeed, windDirection, weatherType)
