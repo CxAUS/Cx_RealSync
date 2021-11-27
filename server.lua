@@ -40,7 +40,7 @@ end)
 
 function syncWeather()
     PerformHttpRequest(apiString, function (errorCode, resultData, resultHeaders)
-	if weatherType == nil or weatherType == "" then print("Unable to Sync Weather Something went wrong") return end
+	--if weatherType == nil or weatherType == "" then print("Unable to Sync Weather Something went wrong") return end
         weatherType = json.decode(resultData).current.condition.code
         windSpeed = json.decode(resultData).current.wind_mph
         windDirection = json.decode(resultData).current.wind_degree
