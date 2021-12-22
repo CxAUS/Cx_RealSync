@@ -40,7 +40,6 @@ end)
 
 function syncWeather()
     PerformHttpRequest(apiString, function (errorCode, resultData, resultHeaders)
-	if weatherType == nil or weatherType == "" then print("Unable to Sync Weather Something went wrong") return end
         weatherType = json.decode(resultData).current.condition.code
         windSpeed = json.decode(resultData).current.wind_mph
         windDirection = json.decode(resultData).current.wind_degree
@@ -51,7 +50,7 @@ end
 function syncTime()
     local h, m, s = tonumber(os.date("%H")), tonumber(os.date("%M")), tonumber(os.date("%S"))
     local OSDATE = os.date('%Y-%m-%d %H:%M:%S')
-	TriggerClientEvent("trp:TimeSync", -1, "ChangeTime", h, m, s)
+	TriggerClientEvent("trp:core:syncTime", -1, "ChangeTime", h, m, s)
     print('-- TRP TIMEWEATHER SYNC --')
     print(OSDATE) 
 end
